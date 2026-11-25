@@ -50,7 +50,7 @@ function build() {
   const site = 'https://weeklyship-ai.github.io/leaveplan/';
   const day = new Date().toISOString().slice(0, 10);
   write('.nojekyll', '');
-  write('robots.txt', `User-agent: *\nAllow: /\nDisallow: /leaveplan/app/\nSitemap: ${site}sitemap.xml\n`);
+  write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${site}sitemap.xml\n`);
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${['', 'terms/', 'privacy/'].map((p) => `  <url><loc>${site}${p}</loc><lastmod>${day}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   console.log(`sw version ${version}`);
   for (const f of ['index.html', 'app/index.html', 'style.css', 'core.js', 'app.js', 'landing.js']) console.log(`dist/${f}  ${(fs.statSync(path.join(OUT, f)).size / 1024).toFixed(1)} KB`);

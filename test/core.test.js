@@ -120,3 +120,12 @@ test('效能：最大預算也在 200ms 內算完', () => {
   L.bestPlan(days, L.MAX_BUDGET);
   assert.ok(Date.now() - t < 200);
 });
+
+test('ICS 長行依 75 bytes 折行且不切斷中文字', () => {
+  const ics = L.toICS([{ start: '2027-02-03', end: '2027-02-10', len: 8, leave: 1, holidays: ['春節連假', '除夕', '春節初一', '春節初二', '春節初三', '春節補假'] }]);
+  const enc = new TextEncoder();
+  for (const line of ics.split('\r\n')) assert.ok(enc.encode(line).length <= 75, line);
+  const unfolded = ics.replace(/\r\n /g, '');
+  assert.ok(unfolded.includes('DESCRIPTION:包含：春節連假、除夕、春節初一、春節初二、春節初三、春節補假'));
+  assert.ok(!ics.includes('�'));
+});

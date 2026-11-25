@@ -63,7 +63,7 @@
         const status = d.holiday ? d.holiday : d.weekend ? '週末' : isLeave ? '請假' : '上班日';
         const cls = 'c' + (d.holiday ? ' hd' : d.weekend ? ' wk' : isLeave ? ' lv' : '') + (inRun.has(d.date) ? ' run' : '') + (d.date === todayIso ? ' today' : '');
         let c;
-        if (d.off) { c = el('div', cls, String(+d.date.slice(8))); }
+        if (d.off) { c = el('div', cls, String(+d.date.slice(8))); c.setAttribute('role', 'img'); }
         else {
           c = el('button', cls, String(+d.date.slice(8)));
           c.type = 'button'; c.dataset.date = d.date; c.setAttribute('aria-pressed', String(isLeave));
@@ -86,7 +86,7 @@
     popFrom = null;
   }
 
-  function planCard(title, plan) {
+  function planCard(title, plan, idx) {
     const b = el('button', 'plan'); b.type = 'button';
     b.append(el('b', null, title));
     const tot = el('div', 'tot');
@@ -100,6 +100,7 @@
       state.leave = L.sanitizeLeave(plan.items.flatMap((i) => i.leaveDates), days);
       popFrom = new Set(state.leave.filter((d) => !prev.has(d)));
       save(); render(); toast(`已標出：連休 ${plan.totalLen} 天，請 ${plan.totalCost} 天`);
+      const again = document.querySelectorAll('#plans .plan')[idx]; if (again) again.focus({ preventScroll: true });
     });
     return b;
   }
@@ -110,14 +111,14 @@
     if (!state.budget) plans.append(el('p', 'empty', '先把天數調到 1 天以上。'));
     else {
       const one = L.longest(days, state.budget), many = L.bestPlan(days, state.budget);
-      if (one.items.length) plans.append(planCard('一次長假：連休最久', one));
-      if (many.items.length) plans.append(planCard('分散出遊：總天數最多', many));
+      if (one.items.length) plans.append(planCard('一次長假：連休最久', one, 0));
+      if (many.items.length) plans.append(planCard('分散出遊：總天數最多', many, one.items.length ? 1 : 0));
       if (!one.items.length) plans.append(el('p', 'empty', '這個天數找不到包含國定假日的方案。'));
     }
     const rank = $('rank'); rank.textContent = '';
     const list = state.budget ? L.ranking(days, state.budget, 8) : [];
     if (!list.length) rank.append(el('p', 'empty', '沒有符合的時段。'));
-    for (const c of list) {
+    list.forEach((c, ri) => {
       const b = el('button', 'rk'); b.type = 'button';
       b.append(el('span', 'd', `${L.fmtRange(c.start, c.end)}`));
       const cp = el('span', 'cp', `${c.cp.toFixed(1)}×`); cp.append(el('small', null, `請${c.cost}休${c.len}`));
@@ -127,9 +128,10 @@
         state.leave = L.sanitizeLeave([...state.leave, ...c.leaveDates], days);
         popFrom = new Set(state.leave.filter((d) => !prev.has(d)));
         save(); render(); toast(`已加入 ${L.fmtRange(c.start, c.end)}`);
+        const again = document.querySelectorAll('#rank .rk')[ri]; if (again) again.focus({ preventScroll: true });
       });
       rank.append(b);
-    }
+    });
   }
 
   function render() {
