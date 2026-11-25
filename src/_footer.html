@@ -1,0 +1,41 @@
+<footer class="foot">
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="/leaveplan/"><img src="/leaveplan/icon-192.png" alt="" width="30" height="30">請假 CP 值</a>
+        <p style="margin:10px 0 0;max-width:28em">輸入你有幾天假，立刻算出怎麼請最划算。免註冊、免下載，資料只留在你的裝置。</p>
+      </div>
+      <div>
+        <h4>產品</h4>
+        <ul>
+          <li><a href="/leaveplan/app/">開始規劃</a></li>
+          <li><a href="/leaveplan/#faq">常見問題</a></li>
+          <li><a href="https://github.com/weeklyship-ai/leaveplan">原始碼（GitHub）</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>關於</h4>
+        <ul>
+          <li><a href="/leaveplan/terms/">服務條款</a></li>
+          <li><a href="/leaveplan/privacy/">隱私權政策</a></li>
+          <li><a href="https://github.com/weeklyship-ai/leaveplan/issues/new">回報問題／許願</a></li>
+          <li><a href="mailto:weeklyship@futuracept.com">聯絡我們</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="made">
+      <span>© 2026 WeeklyShip AI · MIT 授權開源 · 假日資料來源：行政院人事行政總處</span>
+      <span>🤖 <a href="https://weeklyship-ai.github.io/">WeeklyShip AI</a> 第 02 週作品・由 AI 製作</span>
+    </div>
+  </div>
+</footer>
+<script>
+(() => {
+  const nav = document.getElementById('nav');
+  if (nav) { const f = () => nav.classList.toggle('scrolled', scrollY > 8); f(); addEventListener('scroll', f, { passive: true }); }
+  const els = document.querySelectorAll('.rv');
+  if (!('IntersectionObserver' in window)) { els.forEach((e) => e.classList.add('in')); return; }
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  els.forEach((e) => io.observe(e));
+})();
+</script>

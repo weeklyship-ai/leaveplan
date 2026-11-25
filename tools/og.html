@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><style>
+html,body{margin:0;width:1200px;height:630px;overflow:hidden}
+body{background:#f1f5fc;font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;color:#14213d;display:flex;align-items:center;gap:56px;padding:0 72px;box-sizing:border-box;position:relative}
+body::before{content:"";position:absolute;inset:0 0 auto 0;height:14px;background:#2c55e6}
+.l{flex:1}
+.brand{display:flex;align-items:center;gap:14px;font-size:30px;font-weight:800;color:#2c55e6}
+.brand img{width:56px;height:56px;border-radius:14px}
+h1{font-size:82px;line-height:1.1;margin:26px 0 22px;font-weight:900;letter-spacing:-1px}
+h1 mark{background:linear-gradient(transparent 58%,#ffc933 58% 92%,transparent 92%);color:inherit}
+p{font-size:30px;color:#566280;margin:0;line-height:1.5}
+.card{width:440px;background:#fff;border-radius:28px;box-shadow:0 10px 40px rgb(20 33 61/.12);padding:26px 28px}
+.card b{font-size:26px}.card span{color:#566280;font-size:20px;float:right;margin-top:6px}
+.g{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:16px;clear:both}
+.g i{aspect-ratio:1;border-radius:10px;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:20px;color:#14213d}
+.g i.w{background:#e8edf8;color:#566280}.g i.h{background:#fde6e7;color:#9d1c21}.g i.l{background:#ffc933;color:#4a3500}.g i.n{visibility:hidden}
+</style></head><body>
+<div class="l">
+  <div class="brand"><img src="../src/icon-192.png" alt="">請假 CP 值</div>
+  <h1>請 5 天假，<br>連休 <mark>16 天</mark></h1>
+  <p>2027 連假請假規劃・免註冊・資料不上傳</p>
+</div>
+<div class="card"><b>2027 年 2 月</b><span>春節連假前後</span><div class="g" id="g"></div></div>
+<script>
+const h = [4, 5, 6, 7, 8, 9, 10], l = [1, 2, 3, 11, 12];
+let s = '<i class="n"></i>';
+for (let d = 1; d <= 28; d++) {
+  const dow = (d % 7 + 0) % 7; // Feb 1 2027 is Monday: day d has weekday (d) % 7
+  const wk = dow === 0 || dow === 6;
+  s += `<i class="${h.includes(d) ? 'h' : l.includes(d) ? 'l' : wk ? 'w' : ''}">${d}</i>`;
+}
+document.getElementById('g').innerHTML = s;
+</script>
+</body></html>

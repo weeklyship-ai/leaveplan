@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /leaveplan/app/
+Sitemap: https://weeklyship-ai.github.io/leaveplan/sitemap.xml

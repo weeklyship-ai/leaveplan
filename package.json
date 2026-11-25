@@ -1,0 +1,8 @@
+{
+  "name": "leaveplan",
+  "version": "1.0.0",
+  "description": "Taiwan leave planner: find the best days to take leave around public holidays. Static, no signup.",
+  "private": true,
+  "license": "MIT",
+  "scripts": { "test": "node --test \"test/*.test.js\"", "build": "node build.js", "serve": "node serve.js", "deploy": "node deploy.js" }
+}
