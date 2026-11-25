@@ -183,8 +183,21 @@
   const fmtDate = (iso) => `${+iso.slice(5, 7)}/${+iso.slice(8, 10)}（${WEEKDAYS[dow(iso)]}）`;
   const fmtRange = (a, b) => (a === b ? fmtDate(a) : `${fmtDate(a)}～${fmtDate(b)}`);
 
-  // ICS 文字跳脫與每行 75 byte 折行不處理（內容很短），但一定要跳脫特殊字元並移除換行。
+  // ICS 文字：跳脫特殊字元並移除換行，輸出時再依 RFC 5545 折行。
   const icsEscape = (s) => String(s).replace(/[\\;,]/g, (m) => '\\' + m).replace(/[\r\n]+/g, ' ');
+  // RFC 5545：每行最多 75 bytes，續行以空白開頭；依 UTF-8 字元邊界折行。
+  function foldLine(line) {
+    const enc = new TextEncoder();
+    if (enc.encode(line).length <= 75) return line;
+    const out = []; let cur = ''; let bytes = 0; let limit = 75;
+    for (const ch of line) {
+      const n = enc.encode(ch).length;
+      if (bytes + n > limit) { out.push(cur); cur = ''; bytes = 0; limit = 74; }
+      cur += ch; bytes += n;
+    }
+    out.push(cur);
+    return out.join('\r\n ');
+  }
   function toICS(trips, stamp) {
     const z = (stamp || new Date().toISOString()).replace(/[-:]/g, '').replace(/\.\d+/, '');
     const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//WeeklyShip AI//LeavePlan//ZH', 'CALSCALE:GREGORIAN'];
@@ -200,7 +213,7 @@
         'TRANSP:TRANSPARENT', 'END:VEVENT');
     }
     lines.push('END:VCALENDAR');
-    return lines.join('\r\n') + '\r\n';
+    return lines.map(foldLine).join('\r\n') + '\r\n';
   }
 
   const api = { HOLIDAYS, RANGE, YEAR, MAX_BUDGET, WEEKDAYS, isIso, addDays, dow, buildDays, runs, candidates, ranking, bestPlan, longest, sanitizeLeave, fmtDate, fmtRange, toICS };

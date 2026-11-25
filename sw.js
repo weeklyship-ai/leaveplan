@@ -1,5 +1,5 @@
 // 請假 CP 值 service worker：離線支援（stale-while-revalidate）。VERSION 在 build 時替換。
-const VERSION = '13199bb456';
+const VERSION = '0e8364128a';
 const CACHE = 'leaveplan-' + VERSION;
 const CORE = ['./', './app/', './terms/', './privacy/', './style.css', './core.js', './app.js', './landing.js', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
